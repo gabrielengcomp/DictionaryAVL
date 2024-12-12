@@ -283,7 +283,7 @@ void main(){
             case 1:
                 arv = criaArvore();
                 break;
-
+    
             case 2:
                 scanf("%s", palavra); 
                 //printf("%s\n", palavra);
@@ -295,7 +295,7 @@ void main(){
                 getchar(); // Limpa o buffer
                 scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
-                //printf("%s, %s\n", palavra, significado);
+                printf("%s, %s\n", palavra, significado);
                 break;
 
             case 4:
