@@ -150,7 +150,7 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
         y = x;
         int comparacao = strcmp(z->palavra, x->palavra);
         if (comparacao == 0) {
-            printf("Palavra '%s' já existe. Não será inserida.\n", palavra);
+            printf("\nPalavra '%s' já existe. Não será inserida.\n", palavra);
             free(z);
             return;
         } else if (comparacao < 0) {
@@ -163,10 +163,13 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
     z->pai = y;
     if (y == NULL) {
         arv->raiz = z; // Árvore estava vazia
+        printf("\nPalavra %s inserida com sucesso\n", palavra);
     } else if (strcmp(z->palavra, y->palavra) < 0) {
         y->esq = z;
+        printf("\nPalavra %s inserida com sucesso\n", palavra);        
     } else {
         y->dir = z;
+        printf("\nPalavra %s inserida com sucesso\n", palavra);
     }
 
     Balanceamento(z, arv);
@@ -184,7 +187,7 @@ No* buscaNo(No* r, char* palavra) {
     while (r != NULL) {
         int comparacao = strcmp(palavra, r->palavra);
         if (comparacao == 0) {
-            printf("Palavra encontrada: %s, %s\n", r->palavra, r->significado);
+            printf("\nPalavra encontrada: %s, %s\n", r->palavra, r->significado);
             return r; // Palavra encontrada
         } else if (comparacao < 0) {
             r = r->esq;
@@ -192,7 +195,7 @@ No* buscaNo(No* r, char* palavra) {
             r = r->dir;
         }
     }
-    printf("Palavra não encontrada\n");
+    printf("\nPalavra '%s' não encontrada\n", palavra);
     return NULL; // Palavra não encontrada
 }
 
@@ -202,12 +205,12 @@ No* remocaoAVL(Arv* arv, No* r, char* palavra) {
     No* no = buscaNo(r, palavra);
     
     if(r == NULL){
-        printf("ERRO: Arvore vazia ou inexistente\n");
+        printf("\nERRO: Arvore vazia ou inexistente\n");
         return NULL;
     }   
 
     if (no == NULL) {
-        printf("Erro: Palavra '%s' não encontrada na árvore.\n", palavra);
+        printf("\nErro: Palavra '%s' não encontrada na árvore.\n", palavra);
         return r; // Retorna a raiz original sem alterações
     }
 
@@ -275,32 +278,33 @@ void main(){
 
     while (1) {
         scanf("%d\n", &op);
-        printf("%d\n", op);
+        //printf("%d\n", op);
         switch (op) {
             case 1:
                 arv = criaArvore();
                 break;
 
             case 2:
-                scanf("%s", palavra); // Sem \n
-                printf("%s\n", palavra);
+                scanf("%s", palavra); 
+                //printf("%s\n", palavra);
                 remocaoAVL(arv, arv->raiz, palavra);
                 break;
 
             case 3:
-                scanf("%s", palavra); // Sem \n
+                scanf("%s", palavra);
                 getchar(); // Limpa o buffer
-                scanf("%[^\n]", significado); // Lê o restante da linha
-                printf("%s, %s\n", palavra, significado);
+                scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
+                //printf("%s, %s\n", palavra, significado);
                 break;
 
             case 4:
                 scanf("%s", palavra); 
-                printf("%s\n", palavra);
+                //printf("%s\n", palavra);
                 buscaNo(arv->raiz, palavra);    
                 break;
             case 5:
+                printf("\nImpressão em ordem alfabética\n");
                 Ordem(arv->raiz);
                 break;
             case 7:
