@@ -51,51 +51,58 @@ int fb(No* no){
     }
     return (altura(no->esq) - altura(no->dir));
 }
-void RR( No *d ) {
-    No *aux;
-    aux = d->esq;
-    aux->dir ->pai = d;
+No* RR(No* d) {
+    No* aux = d->esq;
+    if (aux->dir) {
+        aux->dir->pai = d;
+    }
     d->esq = aux->dir;
     aux->dir = d;
-    aux->pai =d->pai;
+    aux->pai = d->pai;
     d->pai = aux;
-    d = aux;
+    return aux; // Retorna o novo nó raiz da subárvore
 }
-void LL( No *d ) {
-    No *aux;
-    aux = d->dir;
-    aux->esq->pai = d;
+
+No* LL(No* d) {
+    No* aux = d->dir;
+    if (aux->esq) {
+        aux->esq->pai = d;
+    }
     d->dir = aux->esq;
     aux->esq = d;
-    aux->pai =d->pai;
+    aux->pai = d->pai;
     d->pai = aux;
-    d = aux;
+    return aux; // Retorna o novo nó raiz da subárvore
 }
-void RL( No *d){
-    RR(d->dir);
-    LL(d);
+
+No* RL(No* d) {
+    d->dir = RR(d->dir); // Rotação RR no filho direito
+    return LL(d);        // Rotação LL no nó atual
 }
-void LR( No *d){
-    LL(d->esq);
-    RR(d);
+
+No* LR(No* d) {
+    d->esq = LL(d->esq); // Rotação LL no filho esquerdo
+    return RR(d);        // Rotação RR no nó atual
 }
+
 
 void Balanceamento(No* no) {
     while (no != NULL) {
         no->fb = fb(no);
         if (no->fb == 2) {
-            if (no->esq->fb >= 0) { 
-                RR(no);
-            } else {                
-                LR(no);
+    if (no->esq->fb >= 0) { 
+        no = RR(no); // Atualiza o nó com o retorno
+    } else {                
+        no = LR(no); // Idem
+    }
+    } 
+    else if (no->fb == -2) {
+        if (no->dir->fb <= 0) { 
+            LL(no);
+        } else {                
+            RL(no);
             }
-        } else if (no->fb == -2) {
-            if (no->dir->fb <= 0) { 
-                LL(no);
-            } else {                
-                RL(no);
-            }
-        }
+    }
 
         no = no->pai;
     }
@@ -120,7 +127,7 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
             x = x->dir;
         }
     }
-
+    
     z->pai = y;
     if (y == NULL) {
         arv->raiz = z; // Árvore estava vazia
@@ -132,6 +139,7 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
 
     Balanceamento(z);
 }
+
 No* antecessor(No* no) {
     No* atual = no->esq;
     while (atual->dir != NULL) {
@@ -139,29 +147,30 @@ No* antecessor(No* no) {
     }
     return atual;
 }
-No* buscaNo(No* r, char* palavra) {
-    if (r == NULL) {
-        return NULL; // Palavra não encontrada
-    }
 
-    int comparacao = strcmp(palavra, r->palavra);
-    if (comparacao == 0) {
-        return r; // Palavra encontrada
-    } else if (comparacao < 0) {
-        return buscaNo(r->esq, palavra); // Busca na subárvore esquerda
-    } else {
-        return buscaNo(r->dir, palavra); // Busca na subárvore direita
+No* buscaNo(No* r, char* palavra) {
+    while (r != NULL) {
+        int comparacao = strcmp(palavra, r->palavra);
+        if (comparacao == 0) {
+            printf("Palavra encontrada: %s, %s\n", r->palavra, r->significado);
+            return r; // Palavra encontrada
+        } else if (comparacao < 0) {
+            r = r->esq;
+        } else {
+            r = r->dir;
+        }
     }
+    printf("Palavra não encontrada\n");
+    return NULL; // Palavra não encontrada
 }
+
 
 
 No* remocaoAVL(No* r, char* palavra) {
     No* no = buscaNo(r, palavra);
-
-    printf("\n bbbbbbbbbbb\n");
     
     if(r == NULL){
-        printf("ERRO: Arvore não encontrada");
+        printf("ERRO: Arvore não encontrada\n");
         return NULL;
     }
 
@@ -223,25 +232,29 @@ void main(){
 
     while (1) {
         scanf("%d\n", &op);
-
+        printf("%d\n", op);
         switch (op) {
             case 1:
                 arv = criaArvore();
                 break;
 
             case 2:
-                scanf("%s\n", palavra);
+                scanf("%s", palavra); // Sem \n
                 remocaoAVL(arv->raiz, palavra);
                 break;
 
             case 3:
-                scanf("%s\n%s\n", palavra, significado);
+                scanf("%s", palavra); // Sem \n
+                getchar(); // Limpa o buffer
+                scanf("%[^\n]", significado); // Lê o restante da linha
+                printf("%s, %s\n", palavra, significado);
                 insereAVL(arv, palavra, significado);
                 break;
 
             case 4:
-                scanf("%s\n", palavra);
-                buscaNo(arv->raiz, palavra);
+                scanf("%s", palavra); 
+                printf("%s\n", palavra);
+                buscaNo(arv->raiz, palavra);    
                 break;
 
             case 7:
@@ -250,9 +263,9 @@ void main(){
             default:
                 printf("!! OPCAO INVALIDA !!\n");
                 break;
-            }
         }
 
+    }
     return;
 }
 
