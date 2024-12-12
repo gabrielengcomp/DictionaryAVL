@@ -100,7 +100,7 @@ void Balanceamento(No* no) {
     }
 }
 
-void insereABB(Arv* arv, char* palavra, char* significado) {
+void insereAVL(Arv* arv, char* palavra, char* significado) {
     No* z = criaNo(palavra, significado);
     No* y = NULL;
     No* x = arv->raiz;
@@ -157,6 +157,13 @@ No* buscaNo(No* r, char* palavra) {
 No* remocaoAVL(No* r, char* palavra) {
     No* no = buscaNo(r, palavra);
 
+    printf("\n bbbbbbbbbbb\n");
+    
+    if(r == NULL){
+        printf("ERRO: Arvore não encontrada");
+        return;
+    }
+
     if (no == NULL) {
         printf("Erro: Palavra '%s' não encontrada na árvore.\n", palavra);
         return r; // Retorna a raiz original sem alterações
@@ -210,5 +217,48 @@ No* remocaoAVL(No* r, char* palavra) {
 
 
 void main(){
-    int a;
+
+    printf("\n CCCCCCCCCCCCCCCC\n");
+
+    while (1){
+
+        printf("\naaaaaaaaa\n");
+        int op = 0;
+        scanf("%i", &op);
+        printf("\n %i", &op);
+        char palavra;
+        char significado;
+        Arv* arv;
+
+        switch(op){
+
+
+            case 1:
+                arv = criaArvore();
+                break;
+
+            case 2:
+                printf("\n %i", op);
+                remocaoAVL(arv->raiz, &palavra);
+                break;
+
+            case 3:
+                insereAVL(arv, &palavra, &significado); 
+                break;
+
+            case 4:
+                 buscaNo(arv->raiz, &palavra);
+                 break;
+
+            //case 5:
+
+            case 7:
+                return;
+
+            default:
+                printf("!! OPCAO INVALIDA !!");
+                break;
+        }
+    }
+
 }
