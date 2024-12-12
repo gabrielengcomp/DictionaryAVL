@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+int ContaRot=0;
 typedef struct no{
     char palavra[30];
     char significado[300];
@@ -53,6 +54,7 @@ int fb(No* no){
 }
 No* RR(No* d) {
     No* aux = d->esq; // Subárvore esquerda
+    ContaRot++;
     if (aux->dir) {
         aux->dir->pai = d;
     }
@@ -76,6 +78,7 @@ No* RR(No* d) {
 
 No* LL(No* d) {
     No* aux = d->dir; // Subárvore direita
+    ContaRot++;
     if (aux->esq) {
         aux->esq->pai = d;
     }
@@ -275,6 +278,7 @@ void main(){
     char significado[300];
     Arv* arv = NULL;
     int op = 0;
+    int cont=0;
 
     while (1) {
         scanf("%d\n", &op);
@@ -291,6 +295,7 @@ void main(){
                 break;
 
             case 3:
+                cont++;
                 scanf("%s\n", palavra);
                 scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
@@ -307,6 +312,8 @@ void main(){
                 Ordem(arv->raiz);
                 break;
             case 7:
+                printf("\nPalavras inseridas: %d\n", cont);
+                printf("\nRotações feitas: %d\n", ContaRot);
                 return;
 
             default:
@@ -317,3 +324,5 @@ void main(){
     }
     return;
 }
+
+
