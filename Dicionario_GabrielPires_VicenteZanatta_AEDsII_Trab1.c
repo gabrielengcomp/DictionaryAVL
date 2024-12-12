@@ -294,7 +294,7 @@ void main(){
                 scanf("%s\n", palavra);
                 scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
-                printf("%s SIG: %s\n", palavra, significado);
+                //printf("%s SIG: %s\n", palavra, significado);
                 break;
 
             case 4:
@@ -317,5 +317,3 @@ void main(){
     }
     return;
 }
-
-
