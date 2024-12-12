@@ -260,6 +260,12 @@ No* remocaoAVL(Arv* arv, No* r, char* palavra) {
 
     return r;
 }
+void Ordem(No* no){
+    if(no == NULL) return;
+    Ordem(no->esq);
+    printf("\n%s\nSignificado: %s\n\n",no->palavra, no->significado);
+    Ordem(no->dir);
+}
 
 void main(){
     char palavra[30];
@@ -294,7 +300,9 @@ void main(){
                 printf("%s\n", palavra);
                 buscaNo(arv->raiz, palavra);    
                 break;
-
+            case 5:
+                Ordem(arv->raiz);
+                break;
             case 7:
                 return;
 
