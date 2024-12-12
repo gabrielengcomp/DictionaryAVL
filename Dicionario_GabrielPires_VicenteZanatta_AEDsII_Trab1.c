@@ -52,26 +52,47 @@ int fb(No* no){
     return (altura(no->esq) - altura(no->dir));
 }
 No* RR(No* d) {
-    No* aux = d->esq;
+    No* aux = d->esq; // Subárvore esquerda
     if (aux->dir) {
         aux->dir->pai = d;
     }
     d->esq = aux->dir;
     aux->dir = d;
+
+    // Ajusta os ponteiros pai
     aux->pai = d->pai;
+    if (d->pai) { // Se d não é raiz
+        if (d->pai->esq == d) {
+            d->pai->esq = aux;
+        } else {
+            d->pai->dir = aux;
+        }
+    }
     d->pai = aux;
+
     return aux; // Retorna o novo nó raiz da subárvore
 }
 
+
 No* LL(No* d) {
-    No* aux = d->dir;
+    No* aux = d->dir; // Subárvore direita
     if (aux->esq) {
         aux->esq->pai = d;
     }
     d->dir = aux->esq;
     aux->esq = d;
+
+    // Ajusta os ponteiros pai
     aux->pai = d->pai;
+    if (d->pai) { // Se d não é raiz
+        if (d->pai->esq == d) {
+            d->pai->esq = aux;
+        } else {
+            d->pai->dir = aux;
+        }
+    }
     d->pai = aux;
+
     return aux; // Retorna o novo nó raiz da subárvore
 }
 
@@ -86,27 +107,38 @@ No* LR(No* d) {
 }
 
 
-void Balanceamento(No* no) {
+void Balanceamento(No* no, Arv* arv) {
     while (no != NULL) {
         no->fb = fb(no);
         if (no->fb == 2) {
-    if (no->esq->fb >= 0) { 
-        no = RR(no); // Atualiza o nó com o retorno
-    } else {                
-        no = LR(no); // Idem
-    }
-    } 
-    else if (no->fb == -2) {
-        if (no->dir->fb <= 0) { 
-            LL(no);
-        } else {                
-            RL(no);
+            if (no->esq->fb >= 0) {
+                No* novo_no = RR(no);
+                if (arv->raiz == no) {
+                    arv->raiz = novo_no; // Atualiza a raiz, se necessário
+                }
+            } else {
+                No* novo_no = LR(no);
+                if (arv->raiz == no) {
+                    arv->raiz = novo_no; // Atualiza a raiz, se necessário
+                }
             }
-    }
-
-        no = no->pai;
+        } else if (no->fb == -2) {
+            if (no->dir->fb <= 0) {
+                No* novo_no = LL(no);
+                if (arv->raiz == no) {
+                    arv->raiz = novo_no; // Atualiza a raiz, se necessário
+                }
+            } else {
+                No* novo_no = RL(no);
+                if (arv->raiz == no) {
+                    arv->raiz = novo_no; // Atualiza a raiz, se necessário
+                }
+            }
+        }
+        no = no->pai; // Sobe na árvore para continuar o balanceamento
     }
 }
+
 
 void insereAVL(Arv* arv, char* palavra, char* significado) {
     No* z = criaNo(palavra, significado);
@@ -137,7 +169,7 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
         y->dir = z;
     }
 
-    Balanceamento(z);
+    Balanceamento(z, arv);
 }
 
 No* antecessor(No* no) {
@@ -166,13 +198,13 @@ No* buscaNo(No* r, char* palavra) {
 
 
 
-No* remocaoAVL(No* r, char* palavra) {
+No* remocaoAVL(Arv* arv, No* r, char* palavra) {
     No* no = buscaNo(r, palavra);
     
     if(r == NULL){
-        printf("ERRO: Arvore não encontrada\n");
+        printf("ERRO: Arvore vazia ou inexistente\n");
         return NULL;
-    }
+    }   
 
     if (no == NULL) {
         printf("Erro: Palavra '%s' não encontrada na árvore.\n", palavra);
@@ -190,6 +222,7 @@ No* remocaoAVL(No* r, char* palavra) {
         } else {
             r = NULL; // Se for a raiz
         }
+        printf("Palavra removida com sucesso: %s\n", palavra);
         free(no);
     }
     // Caso 2: Apenas um filho
@@ -206,6 +239,8 @@ No* remocaoAVL(No* r, char* palavra) {
             r = filho; // Se for a raiz
         }
         filho->pai = no->pai;
+        printf("Palavra removida com sucesso: %s\n", palavra);
+
         free(no);
     }
     // Caso 3: Dois filhos
@@ -213,12 +248,14 @@ No* remocaoAVL(No* r, char* palavra) {
         No* y = antecessor(no);
         strcpy(no->palavra, y->palavra);
         strcpy(no->significado, y->significado);
-        no->esq = remocaoAVL(no->esq, y->palavra); // Remove o antecessor
+        no->esq = remocaoAVL(arv, no->esq, y->palavra); // Remove o antecessor
+        printf("Palavra removida com sucesso: %s\n", palavra);
+
     }
 
     // Atualiza FB e reequilibra
     if (r != NULL) {
-        Balanceamento(r);
+        Balanceamento(r, arv);
     }
 
     return r;
@@ -240,7 +277,8 @@ void main(){
 
             case 2:
                 scanf("%s", palavra); // Sem \n
-                remocaoAVL(arv->raiz, palavra);
+                printf("%s\n", palavra);
+                remocaoAVL(arv, arv->raiz, palavra);
                 break;
 
             case 3:
