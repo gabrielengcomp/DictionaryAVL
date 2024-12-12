@@ -161,7 +161,7 @@ No* remocaoAVL(No* r, char* palavra) {
     
     if(r == NULL){
         printf("ERRO: Arvore não encontrada");
-        return;
+        return NULL;
     }
 
     if (no == NULL) {
@@ -219,13 +219,16 @@ No* remocaoAVL(No* r, char* palavra) {
 void main(){
 
     printf("\n CCCCCCCCCCCCCCCC\n");
-
+    char palavra;
+    char significado;
+    Arv* arv;
+    int op = 0;
     while (1){
 
         printf("\naaaaaaaaa\n");
-        int op = 0;
+
         scanf("%i", &op);
-        printf("\n %i", &op);
+        printf("\n %i", op);
         char palavra;
         char significado;
         Arv* arv;
@@ -248,7 +251,7 @@ void main(){
 
             case 4:
                  buscaNo(arv->raiz, &palavra);
-                 break;
+                 break; 
 
             //case 5:
 
