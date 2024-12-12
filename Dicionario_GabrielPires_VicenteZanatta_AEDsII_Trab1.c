@@ -18,6 +18,7 @@ typedef struct Arvore{
 Arv* criaArvore(){
     Arv* nova = (Arv*) malloc(sizeof(Arv));
     nova->raiz = NULL;
+    printf("Arvore vazia criada com successo\n");
     return nova;
 }
 No* criaNo(char* palavra, char* significado) {
@@ -214,54 +215,45 @@ No* remocaoAVL(No* r, char* palavra) {
     return r;
 }
 
-
-
 void main(){
-
-    printf("\n CCCCCCCCCCCCCCCC\n");
-    char palavra;
-    char significado;
-    Arv* arv;
+    char palavra[30];
+    char significado[300];
+    Arv* arv = NULL;
     int op = 0;
-    while (1){
 
-        printf("\naaaaaaaaa\n");
+    while (1) {
+        scanf("%d\n", &op);
 
-        scanf("%i", &op);
-        printf("\n %i", op);
-        char palavra;
-        char significado;
-        Arv* arv;
-
-        switch(op){
-
-
+        switch (op) {
             case 1:
                 arv = criaArvore();
                 break;
 
             case 2:
-                printf("\n %i", op);
-                remocaoAVL(arv->raiz, &palavra);
+                scanf("%s\n", palavra);
+                remocaoAVL(arv->raiz, palavra);
                 break;
 
             case 3:
-                insereAVL(arv, &palavra, &significado); 
+                scanf("%s\n%s\n", palavra, significado);
+                insereAVL(arv, palavra, significado);
                 break;
 
             case 4:
-                 buscaNo(arv->raiz, &palavra);
-                 break; 
-
-            //case 5:
+                scanf("%s\n", palavra);
+                buscaNo(arv->raiz, palavra);
+                break;
 
             case 7:
                 return;
 
             default:
-                printf("!! OPCAO INVALIDA !!");
+                printf("!! OPCAO INVALIDA !!\n");
                 break;
+            }
         }
-    }
 
+    return;
 }
+
+
