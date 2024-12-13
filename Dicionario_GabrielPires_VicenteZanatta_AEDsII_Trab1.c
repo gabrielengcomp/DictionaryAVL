@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 int ContaRot=0;
+
 typedef struct no{
     char palavra[30];
     char significado[300];
@@ -275,10 +277,15 @@ void Ordem(No* no){
 
 void main(){
     char palavra[30];
-    char significado[300];
+    char significado[300] = "a";
     Arv* arv = NULL;
     int op = 0;
     int cont=0;
+
+    time_t inicioExecPrograma = time(NULL); 
+    time_t fimExecInserir = time(NULL);
+    time_t inicioExecBusca = time(NULL); 
+    time_t fimExecBusca = time(NULL); 
 
     while (1) {
         scanf("%d\n", &op);
@@ -286,6 +293,7 @@ void main(){
         switch (op) {
             case 1:
                 arv = criaArvore();
+                time(&inicioExecPrograma);
                 break;
 
             case 2:
@@ -297,23 +305,34 @@ void main(){
             case 3:
                 cont++;
                 scanf("%s\n", palavra);
-                scanf("%[^\n]", significado); //lẽ até a quebra de linha
+                //scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
+
+                time(&fimExecInserir);
                 //printf("%s SIG: %s\n", palavra, significado);
                 break;
 
             case 4:
                 scanf("%s", palavra); 
                 //printf("%s\n", palavra);
-                buscaNo(arv->raiz, palavra);    
+                time(&inicioExecBusca);
+
+                buscaNo(arv->raiz, palavra);
+
+                time(&fimExecBusca);
+                printf("Tempo de Busca: %is", fimExecBusca - inicioExecBusca);
+
                 break;
             case 5:
                 printf("\nImpressão em ordem alfabética\n");
                 Ordem(arv->raiz);
                 break;
             case 7:
-                printf("\nPalavras inseridas: %d\n", cont);
+                printf("\n-------------------------------------------------");
+                printf("\nTempo de execução da Inserção: %is", fimExecInserir - inicioExecPrograma);
+                printf("\nPalavras inseridas: %d", cont);
                 printf("\nRotações feitas: %d\n", ContaRot);
+                printf("-------------------------------------------------");
                 return;
 
             default:
@@ -324,5 +343,3 @@ void main(){
     }
     return;
 }
-
-
