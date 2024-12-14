@@ -210,12 +210,12 @@ No* remocaoAVL(Arv* arv, No* r, char* palavra) {
     No* no = buscaNo(r, palavra);
     
     if(r == NULL){
-        printf("\nERRO: Arvore vazia ou inexistente\n");
+        printf("\nERRO NA REMOÇÃO: Arvore vazia ou inexistente\n");
         return NULL;
     }   
 
     if (no == NULL) {
-        printf("\nErro: Palavra '%s' não encontrada na árvore.\n", palavra);
+        printf("\nErro na Remoção: Palavra '%s' não encontrada na árvore.\n", palavra);
         return r; // Retorna a raiz original sem alterações
     }
 
@@ -268,16 +268,16 @@ No* remocaoAVL(Arv* arv, No* r, char* palavra) {
 
     return r;
 }
-void Ordem(No* no){
+void PrintAVLemOrdemAlfabetica(No* no){
     if(no == NULL) return;
-    Ordem(no->esq);
+    PrintAVLemOrdemAlfabetica(no->esq);
     printf("\n%s\nSignificado: %s\n\n",no->palavra, no->significado);
-    Ordem(no->dir);
+    PrintAVLemOrdemAlfabetica(no->dir);
 }
 
 void main(){
     char palavra[30];
-    char significado[300] = "a";
+    char significado[300];
     Arv* arv = NULL;
     int op = 0;
     int cont=0;
@@ -305,7 +305,7 @@ void main(){
             case 3:
                 cont++;
                 scanf("%s\n", palavra);
-                //scanf("%[^\n]", significado); //lẽ até a quebra de linha
+                scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
 
                 time(&fimExecInserir);
@@ -320,12 +320,12 @@ void main(){
                 buscaNo(arv->raiz, palavra);
 
                 time(&fimExecBusca);
-                printf("Tempo de Busca: %is", fimExecBusca - inicioExecBusca);
+                printf("Tempo de Busca: %is\n", fimExecBusca - inicioExecBusca);
 
                 break;
             case 5:
                 printf("\nImpressão em ordem alfabética\n");
-                Ordem(arv->raiz);
+                PrintAVLemOrdemAlfabetica(arv->raiz);
                 break;
             case 7:
                 printf("\n-------------------------------------------------");
