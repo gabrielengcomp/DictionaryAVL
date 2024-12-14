@@ -103,3 +103,111 @@ apple
 ### Metrics
 - **`ContaRot`**: Tracks the number of rotations performed.
 - **Execution Times**: Measures time for insertions and searches.
+
+============================================================================================================
+
+# Dicionário com Árvore AVL
+
+Este projeto implementa um dicionário utilizando uma **Árvore AVL** em C. Ele suporta operações de inserção, busca, remoção e reorganização balanceada através de rotações AVL. A árvore mantém o balanceamento automaticamente, garantindo eficiência nas operações de consulta e gerenciamento dinâmico do dicionário.
+
+## Funcionalidades
+
+- **Inserção**: Adiciona novas palavras e seus significados, mantendo o balanceamento da árvore.
+- **Busca**: Encontra palavras e seus significados de forma eficiente.
+- **Remoção**: Remove palavras do dicionário e reequilibra a árvore automaticamente.
+- **Impressão em Ordem Alfabética**: Exibe o dicionário em ordem alfabética.
+- **Balanceamento Automático**: Realiza rotações AVL (LL, RR, LR, RL) para garantir o equilíbrio da árvore.
+- **Métricas de Desempenho**:
+  - Número de inserções realizadas.
+  - Total de rotações feitas.
+  - Tempo de execução para inserções e buscas.
+
+## Como Utilizar
+
+1. **Compilar o Código**:
+   ```bash
+   gcc -o dicionario_avl dicionario_avl.c
+   ```
+
+2. **Executar o Programa**:
+   ```bash
+   ./dicionario_avl
+   ```
+
+3. **Opções do Menu**:
+   - `1`: Criar um novo dicionário.
+   - `2`: Remover uma palavra do dicionário.
+   - `3`: Inserir uma nova palavra e seu significado.
+   - `4`: Buscar uma palavra no dicionário.
+   - `5`: Exibir o dicionário em ordem alfabética.
+   - `7`: Sair do programa e exibir métricas de desempenho.
+
+## Formato de Entrada
+
+### Inserir Palavra
+Ao escolher a opção `3`:
+1. Insira a palavra a ser adicionada (exemplo: `maçã`).
+2. Insira seu significado, terminando com uma quebra de linha (exemplo: `Uma fruta que cresce em árvores.`).
+
+### Buscar Palavra
+Ao escolher a opção `4`, insira a palavra que deseja buscar.
+
+### Remover Palavra
+Ao escolher a opção `2`, insira a palavra a ser removida.
+
+## Exemplo de Execução
+
+```
+1
+# Saída: Arvore vazia criada com sucesso
+
+3
+maçã
+Uma fruta que cresce em árvores.
+# Saída: Palavra maçã inserida com sucesso
+
+3
+banana
+Uma fruta amarela.
+# Saída: Palavra banana inserida com sucesso
+
+4
+maçã
+# Saída: Palavra encontrada: maçã, Uma fruta que cresce em árvores.
+
+5
+# Saída:
+# maçã
+# Significado: Uma fruta que cresce em árvores.
+#
+# banana
+# Significado: Uma fruta amarela.
+
+2
+maçã
+# Saída: Palavra removida com sucesso: maçã
+
+7
+# Saída:
+# -------------------------------------------------
+# Tempo de execução da Inserção: 5s
+# Palavras inseridas: 2
+# Rotações feitas: 1
+# -------------------------------------------------
+```
+
+## Resumo do Código
+
+### Funções
+- **`criaArvore`**: Inicializa uma árvore AVL vazia.
+- **`criaNo`**: Cria um novo nó com uma palavra e significado.
+- **`insereAVL`**: Insere uma palavra na árvore e realiza o balanceamento.
+- **`remocaoAVL`**: Remove uma palavra e reequilibra a árvore.
+- **`Balanceamento`**: Realiza o balanceamento da árvore após inserções ou remoções.
+- **`buscaNo`**: Busca uma palavra na árvore.
+- **`PrintAVLemOrdemAlfabetica`**: Exibe a árvore AVL em ordem alfabética.
+- **Rotações (LL, RR, LR, RL)**: Realiza rotações específicas para manter o equilíbrio da árvore.
+
+### Métricas
+- **`ContaRot`**: Acompanha o número de rotações realizadas.
+- **Tempos de Execução**: Mede o tempo de inserções e buscas.
