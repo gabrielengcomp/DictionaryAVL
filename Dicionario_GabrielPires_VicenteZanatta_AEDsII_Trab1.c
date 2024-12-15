@@ -37,7 +37,7 @@ No* criaNo(char* palavra, char* significado) {
 
 int altura(No* no) {
     if (no == NULL) {
-        return 0; // Árvore vazia ou fim do ramo
+        return 0; // Árvore vazia ou fim do caminho
     }
     int alturaesq = altura(no->esq);
     int alturadir = altura(no->dir);
@@ -50,7 +50,7 @@ int altura(No* no) {
 }
 int fb(No* no){
     if (no == NULL) {
-        return 0; // Nó nulo tem fator de balanceamento zero
+        return 0; // nó nulo tem fator de balanceamento zero
     }
     return (altura(no->esq) - altura(no->dir));
 }
@@ -98,7 +98,7 @@ No* LL(No* d) {
     }
     d->pai = aux;
 
-    return aux; // Retorna o novo nó raiz da subárvore
+    return aux; // retorna o novo nó raiz da subárvore
 }
 
 No* RL(No* d) {
@@ -167,7 +167,7 @@ void insereAVL(Arv* arv, char* palavra, char* significado) {
     
     z->pai = y;
     if (y == NULL) {
-        arv->raiz = z; // Árvore estava vazia
+        arv->raiz = z; // Árvore vazia
         printf("\nPalavra %s inserida com sucesso\n", palavra);
     } else if (strcmp(z->palavra, y->palavra) < 0) {
         y->esq = z;
@@ -203,65 +203,92 @@ No* buscaNo(No* r, char* palavra) {
     printf("\nPalavra '%s' não encontrada\n", palavra);
     return NULL; // Palavra não encontrada
 }
+No* buscaNoRem(No* r, char* palavra) {
+    while (r != NULL) {
+        int comparacao = strcmp(palavra, r->palavra);
+        if (comparacao == 0) {
+            return r; // Palavra encontrada
+        } else if (comparacao < 0) {
+            r = r->esq;
+        } else {
+            r = r->dir;
+        }
+    }
+    return NULL; // Palavra não encontrada
+}
 
 
 
 No* remocaoAVL(Arv* arv, No* r, char* palavra) {
-    No* no = buscaNo(r, palavra);
-    
+    No* no = buscaNoRem(r, palavra);
     if(r == NULL){
-        printf("\nERRO NA REMOÇÃO: Arvore vazia ou inexistente\n");
+        printf("\nERRO REMOÇÃO: Arvore vazia ou inexistente\n");
         return NULL;
     }   
 
     if (no == NULL) {
-        printf("\nErro na Remoção: Palavra '%s' não encontrada na árvore.\n", palavra);
-        return r; // Retorna a raiz original sem alterações
+        printf("\nErro: Palavra '%s' não encontrada na árvore.\n", palavra);
+        return r;
     }
 
     // Caso 1: Nó folha
     if (no->esq == NULL && no->dir == NULL) {
+        printf("\nPalavra removida com sucesso: %s\n", palavra);
         if (no->pai != NULL) {
             if (no->pai->esq == no) {
                 no->pai->esq = NULL;
-            } else {
+            }   
+            else {
                 no->pai->dir = NULL;
             }
-        } else {
-            r = NULL; // Se for a raiz
+        } 
+        else {
+            r = NULL; // caso raiz
         }
-        printf("Palavra removida com sucesso: %s\n", palavra);
         free(no);
     }
     // Caso 2: Apenas um filho
     else if (no->esq == NULL || no->dir == NULL) {
         No* filho = (no->esq != NULL) ? no->esq : no->dir;
-
+        printf("\nPalavra removida com sucesso: %s\n", palavra);
         if (no->pai != NULL) {
             if (no->pai->esq == no) {
                 no->pai->esq = filho;
-            } else {
+            } 
+            else {
                 no->pai->dir = filho;
             }
-        } else {
-            r = filho; // Se for a raiz
+        } 
+        else {
+            r = filho; // caso raiz
         }
-        filho->pai = no->pai;
-        printf("Palavra removida com sucesso: %s\n", palavra);
-
-        free(no);
+        filho->pai = no->pai; // atualiza o pai
+        free(no); 
     }
     // Caso 3: Dois filhos
     else {
         No* y = antecessor(no);
+        // troca as informaçoes do no removido pelo antecessor
         strcpy(no->palavra, y->palavra);
         strcpy(no->significado, y->significado);
-        no->esq = remocaoAVL(arv, no->esq, y->palavra); // Remove o antecessor
-        printf("Palavra removida com sucesso: %s\n", palavra);
 
+        //atuliza os ponteiros
+        if (y->pai->esq == y) {
+            y->pai->esq = y->esq;
+        } 
+        else {
+            y->pai->dir = y->esq; 
+        }
+
+        if (y->esq != NULL) {
+            y->esq->pai = y->pai; 
+        }
+        free(y);
+        printf("\nPalavra removida com sucesso: %s\n", palavra);
     }
 
-    // Atualiza FB e reequilibra
+
+    // atualiza FB e rotaciona se necessario
     if (r != NULL) {
         Balanceamento(r, arv);
     }
@@ -305,6 +332,7 @@ void main(){
             case 3:
                 cont++;
                 scanf("%s\n", palavra);
+
                 scanf("%[^\n]", significado); //lẽ até a quebra de linha
                 insereAVL(arv, palavra, significado);
 
